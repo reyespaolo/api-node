@@ -10,7 +10,6 @@ export default({ config, db }) => {
 
   // '/v1/restaurant/add'
   api.post('/add', (req, res) => {
-    console.log('test')
     var body = _.pick(req.body, ['name'])
     let newTemp = new Template(body);
 

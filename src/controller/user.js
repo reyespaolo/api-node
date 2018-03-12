@@ -8,8 +8,6 @@ export default({ config, db }) => {
   let api = Router();
 
   api.post('/add', (req, res) => {
-
-    console.log('test')
     var body = _.pick(req.body, ['email','password']);
     var user = new User(body);
 
