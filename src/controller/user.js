@@ -1,7 +1,10 @@
 import mongoose from 'mongoose';
 import { Router } from 'express';
-import User from '../model/user';
 import { bodyParser } from 'body-parser';
+
+import User from '../model/user';
+import { authenticate } from '../middleware/authenticate';
+
 const _ = require('lodash')
 
 export default({ config, db }) => {
@@ -10,7 +13,6 @@ export default({ config, db }) => {
   api.post('/add', (req, res) => {
     var body = _.pick(req.body, ['email', 'password'])
     var user = new User(body)
-
     user.save()
       .then(() => {
         return user.generateAuthToken()
@@ -21,6 +23,12 @@ export default({ config, db }) => {
       .catch((e) => {
         res.status(400).send(e)
       })
+  });
+
+
+
+  api.get('/me', authenticate, (req, res) => {
+    res.send(req.user)
   });
 
 

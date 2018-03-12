@@ -1,78 +1,96 @@
 import mongoose from 'mongoose';
 import { Router } from 'express';
-import Template from '../model/template';
+const { ObjectID } = require('mongodb');
 import { bodyParser } from 'body-parser';
+
+import Template from '../model/template';
+
 
 const _ = require('lodash')
 
 export default({ config, db }) => {
   let api = Router();
 
-  // '/v1/restaurant/add'
   api.post('/add', (req, res) => {
     var body = _.pick(req.body, ['name'])
-    let newTemp = new Template(body);
+    var newTemp = new Template(body);
 
-    newTemp.save(function(err) {
-      if (err) {
-        res.send(err);
-      }
-      res.json({ message: 'Template saved successfully' });
+    newTemp.save().then((doc) => {
+      res.send(doc);
+    }, (e) => {
+      res.status(400).send(e);
     });
   });
 
-  // Read All
-  api.get('/', (req, res) =>{
-    Template.find({}, (err, temp) => {
-      if(err){
-        res.send(err);
-      }
-      res.json(temp);
+  api.get('/', (req, res) => {
+    Template.find().then((template) => {
+      res.send({template});
+    }, (e) => {
+      res.status(400).send(e);
     });
   });
 
-  // Read per ID Read 1
-  api.get('/:id',(req, res) => {
-    Template.findById(req.params.id, (err, temp) => {
-      if(err){
-        res.send(err);
-      }
-      res.json(temp);
-    });
-  });
+  api.get('/:id', (req, res) => {
+    var id = req.params.id;
 
-  api.put('/:id', (req, res) => {
-    Template.findById(req.params.id, (err, temp) => {
-      if(err){
-        res.send(err);
+    if (!ObjectID.isValid(id)) {
+      return res.status(404).send();
+    }
+
+    Template.findById(id).then((template) => {
+      if (!template) {
+        return res.status(404).send();
       }
-      var body = _.pick(req.body, ['name'])
-      temp.name = body.name
-      temp.save(err => {
-        if(err){
-          res.send(err)
-        }
-        res.json({
-          message: "Restaurant Info Updated",
-          data: temp
-        });
-      });
+      res.send({template});
+    }).catch((e) => {
+      res.status(400).send();
     });
   });
 
   api.delete('/:id', (req, res) => {
-    Template.remove({
-      _id:req.params.id
-    }, (err, template) =>{
-      if(err){
-        res.send(err);
+    var id = req.params.id;
+
+    if (!ObjectID.isValid(id)) {
+      return res.status(404).send();
+    }
+
+    Template.findByIdAndRemove(id).then((template) => {
+      if (!template) {
+        return res.status(404).send();
       }
-      res.json({
-        message: "Template Successfully Removed",
-        data: template
-      })
+
+      res.send({template});
+    }).catch((e) => {
+      res.status(400).send();
+    });
+  });
+
+  api.patch('/:id', (req, res) => {
+    var id = req.params.id;
+    var body = _.pick(req.body, ['name']);
+
+    if (!ObjectID.isValid(id)) {
+      return res.status(404).send();
+    }
+
+    if (_.isBoolean(body.completed) && body.completed) {
+      body.completedAt = new Date().getTime();
+    } else {
+      body.completed = false;
+      body.completedAt = null;
+    }
+
+    Template.findByIdAndUpdate(id, {$set: body}, {new: true}).then((template) => {
+      if (!template) {
+        return res.status(404).send();
+      }
+      res.send({template});
+    }).catch((e) => {
+      res.status(400).send();
     })
-  })
+  });
+
+
 
   return api;
 }
