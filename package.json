@@ -1,7 +1,7 @@
 {
   "name": "api-node",
   "version": "1.0.0",
-  "description": "",
+  "description": "Template for API Server with User Authentication using Node and MongoDB",
   "main": "dist",
   "scripts": {
     "dev": "NODE_ENV=development nodemon -w src --exec \"babel-node src --presets es2015,stage-0\"",
@@ -47,7 +47,8 @@
     "body-parser": "^1.18.2",
     "express": "^4.16.2",
     "lodash": "^4.17.5",
-    "mongoose": "^5.0.9"
+    "mongoose": "^5.0.9",
+    "validator": "^9.4.1"
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",

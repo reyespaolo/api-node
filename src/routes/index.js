@@ -1,18 +1,17 @@
 import express from 'express';
-import config from '../config';
+import { config } from '../config'
 import middleware from '../middleware';
-import initializeDB from '../db';
+import mongoose from '../db';
 import template from '../controller/template'
+import users from '../controller/user'
+
 let router = express();
 
-//Connect to DB
-initializeDB(db => {
-  //internal middleware
-  router.use(middleware({ config, db }));
 
   // API Routes
-  router.use('/template', template({ config, db }));
+  router.use('/template', template({ config, mongoose }));
+  router.use('/users', users({ config, mongoose }));
 
-})
+
 
 export default router;
