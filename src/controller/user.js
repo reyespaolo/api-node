@@ -28,6 +28,18 @@ export default({ config, db }) => {
     res.send(req.user)
   });
 
+  api.post('/login', (req, res) => {
+    var body = _.pick(req.body, ['email', 'password'])
+    User.findByCredentials(body.email,body.password).then((user) => {
+      return user.generateAuthToken().then((token) => {
+        res.status(200).header('x-auth', token).send(user)
+      })
+      // res.send(user)
+    }).catch((err) => {
+      res.status(400).send();
+    });
+  });
+
 
   return api;
 }
