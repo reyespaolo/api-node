@@ -1,9 +1,9 @@
+require('./config');
 import http from 'http';
 import express from 'express';
 import bodyParser from 'body-parser';
 import mongoose from 'mongoose';
 
-import { config } from './config'
 import routes from './routes';
 
 let app = express();
@@ -12,13 +12,13 @@ app.server = http.createServer(app);
 //middleware
 //parse application/json
 app.use(bodyParser.json({
-  limit: config.bodyLimit
+  limit: process.env.BODY_LIMIT
 }));
 
 //api routes v1
 app.use('/v1', routes);
 
-app.server.listen(config.port);
+app.server.listen(process.env.PORT);
 console.log(`Server Started on ${app.server.address().port}`);
 
 export default app;

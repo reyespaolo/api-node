@@ -8,7 +8,7 @@ import Template from '../model/template';
 
 const _ = require('lodash')
 
-export default({ config, db }) => {
+export default({ db }) => {
   let api = Router();
 
   api.post('/add', (req, res) => {

@@ -1,0 +1,14 @@
+{
+  "development": {
+    "PORT": 3000,
+    "BODY_LIMIT": "500kb",
+    "MONGODB_URI": "mongodb://localhost:27017/mongodb",
+    "JWT_SECRET": "123456"
+  },
+  "production": {
+    "PORT": 3000,
+    "BODY_LIMIT": "500kb",
+    "MONGODB_URI": "mongodb://localhost:27017/mongodb",
+    "JWT_SECRET": "123456"
+  }
+}

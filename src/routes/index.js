@@ -1,5 +1,4 @@
 import express from 'express';
-import { config } from '../config'
 import middleware from '../middleware';
 import mongoose from '../db';
 import template from '../controller/template'
@@ -9,8 +8,8 @@ let router = express();
 
 
   // API Routes
-  router.use('/template', template({ config, mongoose }));
-  router.use('/users', users({ config, mongoose }));
+  router.use('/template', template({ mongoose }));
+  router.use('/users', users({ mongoose }));
 
 
 

@@ -6,7 +6,7 @@ import { authenticate } from '../middleware/authenticate';
 
 const _ = require('lodash')
 
-export default({ config, db }) => {
+export default({ db }) => {
   let api = Router();
 
   api.post('/', (req, res) => {
@@ -34,8 +34,15 @@ export default({ config, db }) => {
       return user.generateAuthToken().then((token) => {
         res.status(200).header('x-auth', token).send(user)
       })
-      // res.send(user)
     }).catch((err) => {
+      res.status(400).send();
+    });
+  });
+
+  api.delete('/me/logout', authenticate, (req, res) => {
+    req.user.removeToken(req.token).then(() => {
+      res.status(200).send();
+    }, () => {
       res.status(400).send();
     });
   });

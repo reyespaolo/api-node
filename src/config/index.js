@@ -1,14 +1,10 @@
-const urls = {
-  testDb: 'mongodb://localhost:27017/templateCollection',
-  productionDb: 'mongodb://localhost:27017/prodCollection'
-}
+var env = process.env.NODE_ENV || 'development';
 
-const config = {
-  port: 3005,
-  mongoUrl: urls.testDb,
-  bodyLimit: '500kb'
-}
+if(env === 'development' || env === 'production'){
+  var configuration = require('./config.json');
+  var envConfig = configuration[env];
 
-module.exports = {
-  config
+  Object.keys(envConfig).forEach((key) => {
+    process.env[key] = envConfig[key];
+  });
 }
