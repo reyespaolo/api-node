@@ -1,6 +1,7 @@
 import mongoose from 'mongoose';
 import validator from 'validator';
 import jwt from 'jsonwebtoken';
+import bcrypt from 'bcryptjs';
 
 const _ = require('lodash');
 
@@ -80,5 +81,20 @@ UserSchema.statics.findByToken = function(token) {
   })
 
 }
+
+UserSchema.pre('save', function (next) {
+  var user = this;
+
+  if(user.isModified('password')){
+    bcrypt.genSalt(10, (err,salt) =>{
+      bcrypt.hash(user.password, salt, (err, hash) =>{
+      user.password = hash;
+      next();  
+      });
+    });
+  }else{
+    next();
+  }
+});
 
 module.exports = mongoose.model('User', UserSchema)

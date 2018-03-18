@@ -1,7 +1,6 @@
 import mongoose from 'mongoose';
 import { Router } from 'express';
 import { bodyParser } from 'body-parser';
-
 import User from '../model/user';
 import { authenticate } from '../middleware/authenticate';
 
@@ -10,7 +9,7 @@ const _ = require('lodash')
 export default({ config, db }) => {
   let api = Router();
 
-  api.post('/add', (req, res) => {
+  api.post('/', (req, res) => {
     var body = _.pick(req.body, ['email', 'password'])
     var user = new User(body)
     user.save()
@@ -24,8 +23,6 @@ export default({ config, db }) => {
         res.status(400).send(e)
       })
   });
-
-
 
   api.get('/me', authenticate, (req, res) => {
     res.send(req.user)
