@@ -7,7 +7,14 @@ import mongoose from 'mongoose';
 import routes from './routes';
 
 let app = express();
+
 app.server = http.createServer(app);
+
+app.set('view engine', 'ejs');
+
+app.get('/', (req,res) => {
+  res.render("home")
+})
 
 //middleware
 //parse application/json
