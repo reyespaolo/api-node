@@ -7,9 +7,14 @@ import users from '../controller/user'
 let router = express();
 
 
-  // API Routes
-  router.use('/template', template({ mongoose }));
-  router.use('/users', users({ mongoose }));
+
+  router.use('/login', (req,res) => {
+    res.render("login")
+  })
+
+  router.use('/', (req,res) => {
+    res.render("home")
+  })
 
 
 

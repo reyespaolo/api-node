@@ -32,17 +32,29 @@
         padding:10px;
         display: block;
       }
+
+      .google-btn {
+        color: #fff;
+        text-decoration: none;
+        font-size: 18px;
+        padding: 10px;
+        background: #ff5353;
+      }
     </style>
   </head>
   <body>
     <nav>
       <ul>
         <li><a href="/">Home Page</a></li>
-        <li><a href="/auth/user/logout">Logout</a></li>
-        <li><a href="/login">Login</a></li>      </ul>
+        <li><a href="/v1/auth/user/logout">Logout</a></li>
+        <li><a href="/login">Login</a></li>
+      </ul>
     </nav>
     <header>
-      <h1>OAuth Example</h1>
+      <h1>Login using..</h1>
     </header>
+      <main>
+        <a class="google-btn" href="/v1/auth/users/google">Login with Google</a>
+      </main>
   </body>
 </html>

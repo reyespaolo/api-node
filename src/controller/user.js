@@ -4,7 +4,19 @@ import { bodyParser } from 'body-parser';
 import User from '../model/user';
 import { authenticate } from '../middleware/authenticate';
 
+// const passport = require('passport');
+// const GoogleStrategy = require('passport-google-oauth20');
 const _ = require('lodash')
+// passport.use(
+//   new GoogleStrategy({
+//     callbackURL:'/v1/auth/users/google/redirect',
+//     clientID: process.env.GOOGLE_CLIENTID,
+//     clientSecret: process.env.GOOGLE_CLIENTSECRET
+//   },(accessToken,refreshToken,profile,done) => {
+//     console.log(profile)
+//     return done(null, profile)
+//   })
+// )
 
 export default({ db }) => {
   let api = Router();
@@ -47,6 +59,14 @@ export default({ db }) => {
     });
   });
 
+  // api.get('/google',passport.authenticate('google',{
+  //   scope:['profile', 'email']
+  // }));
+  //
+  // api.get('/google/redirect', passport.authenticate('google',{ session: false }), (req,res) => {
+  //   res.send("you reached the call back URL")
+  // })
+  //
 
   return api;
 }

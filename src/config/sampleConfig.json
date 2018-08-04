@@ -3,12 +3,17 @@
     "PORT": 3000,
     "BODY_LIMIT": "500kb",
     "MONGODB_URI": "mongodb://localhost:27017/logix_erp_dev",
-    "JWT_SECRET": "123456"
+    "JWT_SECRET": "123456",
+    "GOOGLE_CLIENTID": "GOOGLECLIENTID",
+    "GOOGLE_CLIENTSECRET": "GOOGLESECRET"
+
   },
   "production": {
     "PORT": 3000,
     "BODY_LIMIT": "500kb",
     "MONGODB_URI": "mongodb://localhost:27017/logix_erp_prod",
-    "JWT_SECRET": "123456"
+    "JWT_SECRET": "123456",
+    "GOOGLE_CLIENTID": "GOOGLECLIENTID",
+    "GOOGLE_CLIENTSECRET": "GOOGLESECRET"
   }
 }
