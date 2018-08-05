@@ -2,6 +2,7 @@ import mongoose from 'mongoose';
 import validator from 'validator';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcryptjs';
+const passport = require('passport');
 
 const _ = require('lodash');
 
@@ -23,6 +24,9 @@ let UserSchema = new Schema({
     type: String,
     require: true,
     minlength: 6
+  },
+  avatar: {
+    type: String
   },
   tokens: [{
     access:{
@@ -47,17 +51,8 @@ UserSchema.methods.toJSON = function(){
 
 UserSchema.methods.generateAuthToken = function() {
   var user = this;
-  var access = 'auth';
-  var token = jwt.sign({
-    _id: user._id.toHexString(),
-    access
-  }, process.env.JWT_SECRET).toString();
-
-  user.tokens.push({
-    access,
-    token
-  });
-
+  const payload = { _id: user.id, email:user.email, avatar: user.avatar }
+  const token = jwt.sign(payload, process.env.JWT_SECRET, {expiresIn: 3600*24*7});
   return user.save().then(() => {
     return token
   });

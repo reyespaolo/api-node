@@ -3,6 +3,8 @@ import { Router } from 'express';
 import { bodyParser } from 'body-parser';
 import User from '../model/user';
 import { authenticate } from '../middleware/authenticate';
+import gravatar from 'gravatar';
+const passport = require('passport');
 
 // const passport = require('passport');
 // const GoogleStrategy = require('passport-google-oauth20');
@@ -23,20 +25,26 @@ export default({ db }) => {
 
   api.post('/', (req, res) => {
     var body = _.pick(req.body, ['email', 'password'])
+    const avatar = gravatar.url(body.email, {
+      s:200, // size
+      r: 'pg', //rating
+      d: 'mm' // default
+    })
+    body.avatar = avatar;
     var user = new User(body)
     user.save()
       .then(() => {
         return user.generateAuthToken()
       })
       .then((token) => {
-        res.status(200).header('x-auth', token).send(user)
+        res.status(200).header('Bearer', token).send(user)
       })
       .catch((e) => {
         res.status(400).send(e)
       })
   });
 
-  api.get('/me', authenticate, (req, res) => {
+  api.get('/me', passport.authenticate('jwt', {session:false}), (req, res) => {
     res.send(req.user)
   });
 
@@ -44,7 +52,7 @@ export default({ db }) => {
     var body = _.pick(req.body, ['email', 'password'])
     User.findByCredentials(body.email,body.password).then((user) => {
       return user.generateAuthToken().then((token) => {
-        res.status(200).header('x-auth', token).send(user)
+        res.status(200).header('Authorization', token).send(user)
       })
     }).catch((err) => {
       res.status(400).send();
